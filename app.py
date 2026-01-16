@@ -1,22 +1,23 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
 import psycopg2
-from psycopg2.extras import RealDictRowCursor
+from psycopg2.extras import RealDictCursor 
 
 app = Flask(__name__)
 
-# Lee la URL de la base de datos externa configurada en Render
+# Render inyecta la URL de la base de datos externa aquí
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 def get_db_connection():
-    # Conexión a PostgreSQL
+    # Conexión a la base de datos PostgreSQL
     conn = psycopg2.connect(DATABASE_URL)
     return conn
 
 @app.route("/")
 def index():
     conn = get_db_connection()
-    cur = conn.cursor(cursor_factory=RealDictRowCursor)
+    
+    cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT * FROM videojuegos")
     videojuegos = cur.fetchall()
     cur.close()
@@ -32,6 +33,7 @@ def create():
 
         conn = get_db_connection()
         cur = conn.cursor()
+        # PostgreSQL usa %s como marcador de posición
         cur.execute(
             "INSERT INTO videojuegos (nombre, precio, plataforma) VALUES (%s, %s, %s)",
             (nombre, precio, plataforma),
@@ -46,7 +48,7 @@ def create():
 @app.route("/edit/<int:id>", methods=("GET", "POST"))
 def edit(id):
     conn = get_db_connection()
-    cur = conn.cursor(cursor_factory=RealDictRowCursor)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT * FROM videojuegos WHERE id = %s", (id,))
     videojuego = cur.fetchone()
 
