@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="/create">➕ Agregar Videojuego</a><br><br>
+<table>
+<tr>
+<th>Nombre</th><th>Precio</th><th>Plataforma</th><th>Acciones</th>
+</tr>
+{% for v in videojuegos %}
+<tr>
+<td>{{ v["nombre"] }}</td>
+<td>${{ v["precio"] }}</td>
+<td>{{ v["plataforma"] }}</td>
+<td>
+<a href="/edit/{{ v['id'] }}">✏️</a> |
+<a href="/delete/{{ v['id'] }}">🗑️</a>
+</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

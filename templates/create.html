@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="post">
+<input name="nombre" placeholder="Nombre" required><br>
+<input name="precio" type="number" step="0.01" placeholder="Precio" required><br>
+<input name="plataforma" placeholder="Plataforma" required><br>
+<button>Guardar</button>
+</form>
+{% endblock %}
